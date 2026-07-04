@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday ♡</title>
+  <meta name="description" content="A little website made with love for your birthday." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- floating flower petals -->
+  <div class="petals" id="petals" aria-hidden="true"></div>
+
+  <!-- background music -->
+  <audio id="bgm" loop preload="auto"><source src="song1.mp3" type="audio/mpeg" /></audio>
+
+  <!-- ============ LOADING ============ -->
+  <div class="loader" id="loader">
+    <div class="loader-flower">💐</div>
+    <p>Preparing something special for you...</p>
+  </div>
+
+  <!-- ============ LOCK / PASSWORD ============ -->
+  <section class="lock hidden" id="lock">
+    <div class="lock-card">
+      <div class="lock-flower">🌸</div>
+      <h1 class="lock-title">For You, My Love</h1>
+      <p class="lock-sub">Enter our secret code</p>
+      <div class="pin-dots" id="pinDots">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="keypad" id="keypad">
+        <button data-key="1">1</button>
+        <button data-key="2">2</button>
+        <button data-key="3">3</button>
+        <button data-key="4">4</button>
+        <button data-key="5">5</button>
+        <button data-key="6">6</button>
+        <button data-key="7">7</button>
+        <button data-key="8">8</button>
+        <button data-key="9">9</button>
+        <button data-key="del" class="sub">✕</button>
+        <button data-key="0">0</button>
+        <button data-key="del" class="sub">↩</button>
+      </div>
+      <p class="lock-hint">Hint : 21-10-2006 💕</p>
+    </div>
+  </section>
+
+  <!-- ============ GIFT OPENING ============ -->
+  <section class="gift hidden" id="gift">
+    <p class="gift-label">✨ Opening your gift... ✨</p>
+    <div class="giftbox" id="giftbox">
+      <div class="rays"></div>
+      <div class="gift-lid"><span class="bow">🎀</span></div>
+      <div class="gift-body"></div>
+    </div>
+    <p class="gift-tap">tap the gift ♡</p>
+  </section>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main id="main" class="hidden">
+
+    <!-- HERO -->
+    <section class="section hero reveal">
+      <p class="eyebrow">🌸 Your Special Day 🌸</p>
+      <h1 class="hero-title">Happy<br/><em>Birthday</em><br/><span class="hero-name" id="heroName">Ciwa</span></h1>
+      <span class="rule"></span>
+      <p class="hero-date" id="heroDate">JUNE 10 &nbsp;·&nbsp; THE MOST SPECIAL DAY</p>
+      <p class="scroll-cue">⌄<br/><span>scroll</span></p>
+    </section>
+
+    <!-- DIGITAL BOUQUET -->
+    <section class="section bouquet reveal">
+      <p class="section-eyebrow">— MY FIRST GIFT —</p>
+      <h2 class="section-title">A Digital Bouquet</h2>
+      <p class="section-sub">Each flower holds a little message just for you</p>
+
+      <div class="vase-stage" id="vaseStage">
+        <button class="flower" data-msg="You are as beautiful as cherry blossoms — lovely and bringing joy wherever you go.">🌸</button>
+        <button class="flower" data-msg="Your cheerfulness is like a hibiscus — bright and vibrant.">🌺</button>
+        <button class="flower" data-msg="Like a rose, you are elegant, strong, and absolutely unforgettable.">🌹</button>
+        <button class="flower" data-msg="Like a tulip, your love is gentle and always quietly blooming.">🌷</button>
+        <button class="flower" data-msg="Your warmth is like a lotus — pure and beautiful.">🪷</button>
+        <div class="vase"><span>🎀</span></div>
+      </div>
+
+      <p class="hint-small">Touch each flower to reveal its message 💕</p>
+      <div class="flower-msg" id="flowerMsg">Tap a flower above ✿</div>
+    </section>
+
+    <!-- LETTER -->
+    <section class="section letter reveal">
+      <p class="section-eyebrow">— FROM MY HEART —</p>
+      <h2 class="section-title">A Letter For You</h2>
+      <article class="letter-card">
+        <span class="letter-stamp" id="letterStamp">June 10</span>
+        <h3 class="letter-greet">for my dearest love!</h3>
+        <div id="letterBody"></div>
+      </article>
+    </section>
+
+    <!-- PHOTO MEMORIES -->
+    <section class="section memories reveal">
+      <p class="section-eyebrow">— A COLLECTION OF MEMORIES —</p>
+      <h2 class="section-title">BIRTHDAY GIRL!</h2>
+      <p class="section-sub">the sweetest person i know</p>
+      <div class="polaroids" id="polaroids"></div>
+    </section>
+
+    <!-- PLAYLIST -->
+    <section class="section playlist reveal">
+      <h2 class="section-title">Special Playlist</h2>
+      <p class="section-sub">Songs that always remind me of you 🌼</p>
+      <div class="player">
+        <div class="disc" id="disc"><span class="disc-center"></span></div>
+        <p class="np-title" id="npTitle">—</p>
+        <p class="np-artist" id="npArtist">—</p>
+        <div class="progress" id="progress"><span id="progressFill"></span></div>
+        <div class="player-btns">
+          <button id="prevBtn" aria-label="prev">⏮</button>
+          <button id="playBtn" class="play" aria-label="play">▶</button>
+          <button id="nextBtn" aria-label="next">⏭</button>
+        </div>
+      </div>
+      <ul class="song-list" id="songList"></ul>
+    </section>
+
+    <!-- JAR -->
+    <section class="section jar-sec reveal">
+      <p class="section-eyebrow">— FROM MY HEART TO YOURS —</p>
+      <h2 class="section-title">Reasons I'm Grateful to Know You</h2>
+      <p class="section-sub">Shake the jar and pick a note 🫙</p>
+      <div class="jar" id="jar">
+        <div class="jar-lid"></div>
+        <div class="jar-body">
+          <span class="luv l1">💙</span>
+          <span class="luv l2">🩵</span>
+          <span class="luv l3">🤍</span>
+          <span class="luv l4">💙</span>
+          <span class="luv l5">🩵</span>
+          <span class="luv l6">💙</span>
+          <span class="luv l7">🤍</span>
+          <span class="luv l8">🩵</span>
+          <span class="luv l9">💙</span>
+          <span class="luv l10">🤍</span>
+        </div>
+      </div>
+      <button class="pill-btn" id="shakeBtn">🫙 Shake the Jar</button>
+      <div class="jar-note" id="jarNote"></div>
+    </section>
+
+    <!-- FINAL WISH -->
+    <section class="section wish reveal">
+      <p class="eyebrow">🌸 With all my heart 🌸</p>
+      <h2 class="wish-title">May your life always be <em>filled</em> with flowers</h2>
+      <p class="wish-text" id="wishText"></p>
+      <button class="pill-btn glow" id="celebrateBtn">🎂 Celebrate</button>
+      <p class="signoff">-with love ziyah maybe your last princess💗</p>
+    </section>
+
+  </main>
+
+  <!-- ============ HAPPY BIRTHDAY MODAL ============ -->
+  <div class="modal hidden" id="hbdModal">
+    <div class="modal-flowers" id="modalFlowers" aria-hidden="true"></div>
+    <div class="modal-card">
+      <div class="cake">🎂</div>
+      <h2 class="modal-title">Happy birthday!</h2>
+      <p class="modal-sub">who is already 20 years old rn😼</p>
+      <button class="pill-btn" id="closeModal">Close ✕</button>
+    </div>
+  </div>
+
+  <!-- ============ PHOTO LIGHTBOX ============ -->
+  <div class="lightbox hidden" id="lightbox">
+    <button class="lb-close" id="lbClose" aria-label="tutup">✕</button>
+    <figure class="lb-figure">
+      <img id="lbImg" alt="memory" />
+      <figcaption id="lbCap"></figcaption>
+    </figure>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
