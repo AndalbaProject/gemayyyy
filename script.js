@@ -1,15 +1,8 @@
-/* ============================================================
-   Happy Birthday • interaksi
-   Atur semua isi di CONFIG ini lalu simpan.
-   ============================================================ */
 const CONFIG = {
   name: "Bey 🐳",
   dateLabel: "21 OCT 2006",
   stamp: "21 Oct",
-  // kode rahasia (jumlah angka = jumlah titik di layar = 8). clue: tanggal spesial
   password: "15052022",
-
-  // ---------- surat ----------
   letter: [
     "happy 20!!! panjang umur dan sehat selalu, semoga makananmu selalu enak, selimutmu selalu lembut, bantalmu selalu empuk, dan jalan yg kamu lalui selalu mulus.",
     "semoga selalu di kelilingi dengan hal-hal yang baik dan bertemu orang yang baik juga. semoga masih luas harapan untuk baikmu. barangkali kamu terjatuh, aku selalu berdoa semoga semesta selalu rela memelukmu ketika berada jauh dari pada jangkauan ku.",
@@ -17,28 +10,20 @@ const CONFIG = {
     "maybe you weren't meant to be my finish line, but I'm still glad I met you, because even if we didn't stay, you were still a part of my journey. thankyou bey🐳",
   ],
   letterSign: "-with love ziyah maybe your last princess💗",
-
-  // ---------- photo memories (pakai foto1..foto6 yang ada) ----------
   photos: [
     { img: "foto1.jpeg", cap: "may that beautiful smile continue to shine brightly on your face" },
   ],
-
-  // ---------- timeline ----------
   timeline: [
     { icon: "✨", tag: "The very beginning", title: "First Time We Met", text: "The day the world seemed to spin a little faster, and everything felt different from before." },
     { icon: "💬", tag: "A magical moment", title: "Our First Conversation", text: "The first words spoken, the first laughter shared — the beginning of thousands of stories we would write together." },
     { icon: "🌙", tag: "Growing closer", title: "Endless Late-Night Talks", text: "Hours that felt like minutes, talking about everything and nothing at all." },
     { icon: "💗", tag: "Today & always", title: "Loving You More Each Day", text: "Every moment with you becomes my new favourite memory." },
   ],
-
-  // ---------- playlist ----------
   songs: [
     { title: "Photograph", artist: "Ed Sheeran", src: "song1.mp3" },
     { title: "Keep Me", artist: "Novo Amor", src: "song2.mp3" },
     { title: "I Love You, I'm Sorry", artist: "Gracie Abrams", src: "song3.mp3" },
   ],
-
-  // ---------- jar notes ----------
   jarNotes: [
     "Your presence alone is enough to make any room feel warmer.",
     "The way you laugh at your own jokes makes my whole day.",
@@ -48,91 +33,29 @@ const CONFIG = {
     "Just being near you feels like coming home.",
     "You remind me, again and again, of what truly matters.",
   ],
-
-  // ---------- final wish ----------
   wish: "Happy birthday!! May your days always be filled with love, happiness, and all the beautiful things you deserve. I am grateful every single day to know you",
 };
 
-/* ============================================================
-   apply text content
-   ============================================================ */
 const $ = (id) => document.getElementById(id);
 $("heroName").textContent = CONFIG.name;
 $("heroDate").innerHTML = `${CONFIG.dateLabel} &nbsp;·&nbsp; THE MOST SPECIAL DAY`;
 $("letterStamp").textContent = CONFIG.stamp;
-$("wishText").textContent = CONFIG.wish.replace(/\{name\}/g, CONFIG.name);
 
-const letterBodyEl = $("letterBody");
-let letterTyped = false;
-function typeLetter() {
-  if (letterTyped) return;
-  letterTyped = true;
-  const paras = CONFIG.letter.map((t) => ({ text: t, cls: "" }));
-  paras.push({ text: CONFIG.letterSign, cls: "sign" });
+$("finalSign").textContent = CONFIG.letterSign;
+$("wishText").textContent = CONFIG.wish;
 
-  let pi = 0;
-  function typePara() {
-    if (pi >= paras.length) return;
-    const { text, cls } = paras[pi];
-    const p = document.createElement("p");
-    if (cls) p.className = cls;
-    p.classList.add("typing");
-    letterBodyEl.appendChild(p);
-    let ci = 0;
-    const timer = setInterval(() => {
-      p.textContent = text.slice(0, ci + 1);
-      ci++;
-      if (ci >= text.length) {
-        clearInterval(timer);
-        p.classList.remove("typing");
-        pi++;
-        setTimeout(typePara, 400);
-      }
-    }, 28);
-  }
-  typePara();
-}
-
-$("polaroids").innerHTML = CONFIG.photos
-  .map((p, i) => {
-    const r = (i % 2 ? 1 : -1) * (2 + (i % 3));
-    return `<figure class="pola" data-i="${i}" style="--r:${r}deg">
-      <span class="pic" style="background-image:url('${p.img}')"></span>
-      <figcaption class="cap">${p.cap}</figcaption>
-    </figure>`;
-  })
-  .join("");
-
-$("timelineList") && ($("timelineList").innerHTML = CONFIG.timeline
-  .map(
-    (t) => `<div class="tl-card">
-      <span class="tl-icon">${t.icon}</span>
-      <p class="tl-tag">${t.tag}</p>
-      <h3 class="tl-title">${t.title}</h3>
-      <p class="tl-text">${t.text}</p>
-    </div>`
-  )
-  .join(""));
-
-/* ============================================================
-   LOADER -> LOCK
-   ============================================================ */
-const loader = $("loader");
-const lock = $("lock");
+// LOADER
 setTimeout(() => {
-  loader.classList.add("fade");
-  lock.classList.remove("hidden");
+  $("loading-screen").classList.add("hidden");
+  $("pin-screen").classList.remove("hidden");
 }, 2200);
 
-/* ============================================================
-   PASSWORD
-   ============================================================ */
+// PIN
 const pinDots = $("pinDots");
 const keypad = $("keypad");
 let pin = "";
-
 function renderPin() {
-  pinDots.querySelectorAll("span").forEach((d, i) => d.classList.toggle("filled", i < pin.length));
+  pinDots.querySelectorAll(".pin-dot").forEach((d, i) => d.classList.toggle("filled", i < pin.length));
 }
 keypad.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
@@ -144,250 +67,268 @@ keypad.addEventListener("click", (e) => {
 });
 function checkPin() {
   if (pin === CONFIG.password) {
-    lock.classList.add("hidden");
-    showGift();
+    $("pinSuccessOverlay").classList.remove("hidden");
+    setTimeout(() => {
+      $("pin-screen").classList.add("hidden");
+      $("giftbox-screen").classList.remove("hidden");
+    }, 600);
   } else {
-    pinDots.classList.add("shake");
-    setTimeout(() => { pinDots.classList.remove("shake"); pin = ""; renderPin(); }, 500);
+    pinDots.querySelectorAll(".pin-dot").forEach(d => d.classList.add("error"));
+    setTimeout(() => { 
+      pinDots.querySelectorAll(".pin-dot").forEach(d => d.classList.remove("error"));
+      pin = ""; renderPin(); 
+    }, 500);
   }
 }
 
-/* ============================================================
-   GIFT OPENING
-   ============================================================ */
-const gift = $("gift");
+// GIFTBOX
 const giftbox = $("giftbox");
-const main = $("main");
-
-function showGift() {
-  gift.classList.remove("hidden");
-  giftbox.classList.add("shake-it");
-}
 giftbox.addEventListener("click", () => {
-  if (giftbox.classList.contains("open")) return;
-  giftbox.classList.remove("shake-it");
-  giftbox.classList.add("open");
-  burstPetals(40);
+  if (giftbox.classList.contains("opened")) return;
+  giftbox.classList.add("opened");
+  $("giftLid").classList.add("open");
+  $("giftGlow").classList.add("active");
+  $("giftRays").classList.add("active");
+  
   startMusicOnce();
+  
+  // Create rays
+  for (let i = 0; i < 12; i++) {
+    const r = document.createElement("div");
+    r.className = "ray";
+    r.style.transform = `rotate(${i * 30}deg)`;
+    $("giftRays").appendChild(r);
+  }
+
   setTimeout(() => {
-    gift.classList.add("hidden");
-    main.classList.remove("hidden");
+    $("giftbox-screen").classList.add("hidden");
+    $("main").classList.remove("hidden");
     initReveal();
     window.scrollTo(0, 0);
-  }, 1200);
+  }, 1800);
 });
 
-/* ============================================================
-   REVEAL ON SCROLL
-   ============================================================ */
-function initReveal() {
-  const obs = new IntersectionObserver(
-    (entries) => entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.classList.add("in");
-        if (e.target.classList.contains("letter")) typeLetter();
+// LETTER
+let letterTyped = false;
+function typeLetter() {
+  if (letterTyped) return;
+  letterTyped = true;
+  const lb = $("letterBody");
+  
+  let pi = 0;
+  function typePara() {
+    if (pi >= CONFIG.letter.length) return;
+    const p = document.createElement("p");
+    p.className = "letter-para";
+    lb.appendChild(p);
+    
+    let ci = 0;
+    const text = CONFIG.letter[pi];
+    const timer = setInterval(() => {
+      p.textContent = text.slice(0, ci + 1) + "|";
+      ci++;
+      if (ci >= text.length) {
+        clearInterval(timer);
+        p.textContent = text;
+        pi++;
+        setTimeout(typePara, 400);
       }
-    }),
-    { threshold: 0.18 }
-  );
-  document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+    }, 28);
+  }
+  typePara();
 }
 
-/* ============================================================
-   PHOTO LIGHTBOX
-   ============================================================ */
-const lightbox = $("lightbox");
-const lbImg = $("lbImg");
-const lbCap = $("lbCap");
-$("polaroids").addEventListener("click", (e) => {
-  const pola = e.target.closest(".pola");
-  if (!pola) return;
-  const p = CONFIG.photos[+pola.dataset.i];
-  lbImg.src = p.img;
-  lbCap.textContent = p.cap;
-  lightbox.classList.remove("hidden");
-});
-function closeLightbox() { lightbox.classList.add("hidden"); }
-$("lbClose").addEventListener("click", closeLightbox);
-lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+// REVEAL
+function initReveal() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add("revealed");
+        if (e.target.classList.contains("section-letter")) typeLetter();
+      }
+    });
+  }, { threshold: 0.15 });
+  
+  document.querySelectorAll(".reveal-fade, .reveal-up, .reveal-scale, .timeline-item").forEach(el => obs.observe(el));
+}
 
-/* ============================================================
-   DIGITAL BOUQUET
-   ============================================================ */
-const flowerMsg = $("flowerMsg");
-const vaseStage = $("vaseStage");
-document.querySelectorAll(".flower").forEach((f) => {
+// POLAROIDS
+$("polaroids").innerHTML = CONFIG.photos.map((p, i) => {
+  const r = (i % 2 ? 1 : -1) * (2 + (i % 3));
+  return `<div class="polaroid" style="transform: rotate(${r}deg)" onclick="openLightbox(${i})">
+    <div class="polaroid-tape"></div>
+    <div class="polaroid-photo">
+      <div class="polaroid-photo-inner">
+        <img class="polaroid-photo-img" src="${p.img}" alt="memory" />
+      </div>
+    </div>
+    <div class="polaroid-caption">${p.cap}</div>
+  </div>`;
+}).join("");
+
+function openLightbox(i) {
+  const p = CONFIG.photos[i];
+  $("lbImg").src = p.img;
+  $("lbCap").textContent = p.cap;
+  $("lightbox").classList.remove("hidden");
+}
+$("lbClose").addEventListener("click", () => $("lightbox").classList.add("hidden"));
+$("lbCloseBtn").addEventListener("click", () => $("lightbox").classList.add("hidden"));
+
+
+
+// BOUQUET
+document.querySelectorAll(".b-flower").forEach((f) => {
   f.addEventListener("click", () => {
-    vaseStage.classList.add("gathered");
-    flowerMsg.style.opacity = "0";
+    f.classList.add("tapped");
+    $("flowerMsg").style.opacity = "0";
     setTimeout(() => {
-      flowerMsg.textContent = f.dataset.msg;
-      flowerMsg.style.opacity = "1";
+      $("flowerMsg").textContent = f.dataset.msg;
+      $("flowerMsg").style.opacity = "1";
     }, 200);
-    burstPetals(8, f);
+    burstPetals(10);
   });
 });
 
-/* ============================================================
-   PLAYLIST
-   ============================================================ */
-const bgm = $("bgm");
-const songListEl = $("songList");
-const npTitle = $("npTitle");
-const npArtist = $("npArtist");
-const disc = $("disc");
-const playBtn = $("playBtn");
-const progressEl = $("progress");
-const progressFill = $("progressFill");
-let current = -1;
-
-function renderSongs() {
-  songListEl.innerHTML = "";
-  CONFIG.songs.forEach((s, i) => {
-    const li = document.createElement("li");
-    li.className = "song" + (i === current ? " playing" : "");
-    li.innerHTML =
-      `<span class="s-num">${i + 1}</span>` +
-      `<span class="s-meta"><span class="s-title">${s.title}</span><span class="s-artist">${s.artist || ""}</span></span>` +
-      `<span class="s-eq"><i></i><i></i><i></i></span>`;
-    li.addEventListener("click", () => loadTrack(i, true));
-    songListEl.appendChild(li);
-  });
-}
-function loadTrack(i, play) {
-  current = (i + CONFIG.songs.length) % CONFIG.songs.length;
-  const s = CONFIG.songs[current];
-  npTitle.textContent = s.title;
-  npArtist.textContent = s.artist || "";
-  const src = s.src || "song1.mp3";
-  if (!bgm.src.endsWith(src)) bgm.src = src;
-  renderSongs();
-  if (play) bgm.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
-}
-function setPlaying(on) {
-  playBtn.textContent = on ? "⏸" : "▶";
-  disc.classList.toggle("spin", on);
-  songListEl.classList.toggle("is-playing", on);
-}
-function tryPlayMusic() {
-  bgm.volume = 0.5;
-  if (!bgm.currentSrc.endsWith("song1.mp3")) bgm.src = "song1.mp3";
-  bgm.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
-}
-playBtn.addEventListener("click", () => {
-  if (bgm.paused) bgm.play().then(() => setPlaying(true)).catch(() => { });
-  else { bgm.pause(); setPlaying(false); }
-});
-$("prevBtn").addEventListener("click", () => loadTrack(current - 1, true));
-$("nextBtn").addEventListener("click", () => loadTrack(current + 1, true));
-bgm.addEventListener("timeupdate", () => {
-  if (bgm.duration) progressFill.style.width = (bgm.currentTime / bgm.duration) * 100 + "%";
-});
-bgm.addEventListener("ended", () => loadTrack(current + 1, true));
-progressEl.addEventListener("click", (e) => {
-  if (!bgm.duration) return;
-  const r = progressEl.getBoundingClientRect();
-  bgm.currentTime = ((e.clientX - r.left) / r.width) * bgm.duration;
-});
-renderSongs();
-npTitle.textContent = "—";
-npArtist.textContent = "tap a song to play";
-
-/* ---------- mulai musik secepat mungkin ---------- */
-let musicStarted = false;
-function startMusicOnce() {
-  if (musicStarted) return;
-  musicStarted = true;
-  tryPlayMusic();
-}
-/* coba langsung saat halaman dibuka (mungkin diblok browser) */
-window.addEventListener("load", () => {
-  bgm.volume = 0.5;
-  bgm.play().then(() => { musicStarted = true; setPlaying(true); }).catch(() => { });
-});
-/* kalau diblok, mulai pada interaksi pertama (sentuh layar / klik / tekan tombol) */
-["pointerdown", "touchstart", "keydown", "click"].forEach((ev) =>
-  document.addEventListener(ev, startMusicOnce, { passive: true })
-);
-
-/* ============================================================
-   SHAKE THE JAR
-   ============================================================ */
+// JAR
 const jar = $("jar");
 const shakeBtn = $("shakeBtn");
+const jarNoteCard = $("jarNoteCard");
 const jarNote = $("jarNote");
 let lastNote = -1;
 shakeBtn.addEventListener("click", () => {
   jar.classList.add("shaking");
-  jarNote.classList.remove("show");
-  shakeBtn.disabled = true;
+  jarNoteCard.classList.add("hidden");
+  shakeBtn.style.pointerEvents = "none";
+  
   setTimeout(() => {
     jar.classList.remove("shaking");
     let i;
     do { i = Math.floor(Math.random() * CONFIG.jarNotes.length); }
     while (i === lastNote && CONFIG.jarNotes.length > 1);
     lastNote = i;
-    jarNote.textContent = "🫙 " + CONFIG.jarNotes[i];
-    jarNote.classList.add("show");
-    burstPetals(10);
-    shakeBtn.disabled = false;
-  }, 900);
+    jarNote.textContent = CONFIG.jarNotes[i];
+    jarNoteCard.classList.remove("hidden");
+    burstPetals(15);
+    shakeBtn.style.pointerEvents = "auto";
+  }, 800);
 });
 
-/* ============================================================
-   CELEBRATE MODAL
-   ============================================================ */
-const hbdModal = $("hbdModal");
-$("celebrateBtn").addEventListener("click", () => {
-  hbdModal.classList.remove("hidden");
-  modalFlowerBurst();
-  burstPetals(60);
+// MUSIC
+const bgm = $("bgm");
+let current = -1;
+function renderSongs() {
+  $("songList").innerHTML = CONFIG.songs.map((s, i) => 
+    `<div class="playlist-item ${i === current ? 'active' : ''}" onclick="loadTrack(${i}, true)">
+      <div class="pl-num">0${i + 1}</div>
+      <div class="pl-info">
+        <div class="pl-name">${s.title}</div>
+        <div class="pl-artist">${s.artist}</div>
+      </div>
+      <div class="pl-emoji">🎵</div>
+    </div>`
+  ).join("");
+}
+
+function loadTrack(i, play) {
+  current = (i + CONFIG.songs.length) % CONFIG.songs.length;
+  const s = CONFIG.songs[current];
+  $("npTitle").textContent = s.title;
+  $("npArtist").textContent = s.artist || "";
+  const src = s.src || "song1.mp3";
+  if (!bgm.src.endsWith(src)) bgm.src = src;
+  renderSongs();
+  if (play) bgm.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+}
+
+function setPlaying(on) {
+  $("playBtn").textContent = on ? "⏸" : "▶";
+  if(on) $("disc").classList.add("spinning");
+  else $("disc").classList.remove("spinning");
+}
+
+$("playBtn").addEventListener("click", () => {
+  if (bgm.paused) bgm.play().then(() => setPlaying(true)).catch(()=>{});
+  else { bgm.pause(); setPlaying(false); }
 });
-$("closeModal").addEventListener("click", () => hbdModal.classList.add("hidden"));
+$("prevBtn").addEventListener("click", () => loadTrack(current - 1, true));
+$("nextBtn").addEventListener("click", () => loadTrack(current + 1, true));
 
-/* ============================================================
-   FLOWER PETALS
-   ============================================================ */
-const petals = $("petals");
-const PETALS = ["🌸", "🌷", "🌺", "🪷", "🌹", "💮", "🏵️"];
+bgm.addEventListener("timeupdate", () => {
+  if (bgm.duration) $("progressFill").style.width = (bgm.currentTime / bgm.duration) * 100 + "%";
+});
+$("progress").addEventListener("click", (e) => {
+  if (!bgm.duration) return;
+  const r = $("progress").getBoundingClientRect();
+  bgm.currentTime = ((e.clientX - r.left) / r.width) * bgm.duration;
+});
+bgm.addEventListener("ended", () => loadTrack(current + 1, true));
 
+loadTrack(0, false);
+
+let musicStarted = false;
+function startMusicOnce() {
+  if (musicStarted) return;
+  musicStarted = true;
+  bgm.volume = 0.5;
+  const initialSrc = CONFIG.songs[0].src || "song1.mp3";
+  if (!bgm.currentSrc.endsWith(initialSrc)) bgm.src = initialSrc;
+  bgm.play().then(() => setPlaying(true)).catch(()=>{});
+}
+window.addEventListener("load", () => {
+  bgm.volume = 0.5;
+  bgm.play().then(() => { musicStarted = true; setPlaying(true); }).catch(()=>{});
+});
+["pointerdown", "touchstart", "keydown", "click"].forEach((ev) =>
+  document.addEventListener(ev, startMusicOnce, { passive: true })
+);
+
+// PROGRESS BAR
+window.addEventListener("scroll", () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  $("scroll-progress-bar").style.width = scrolled + "%";
+});
+
+// PETALS
+const petalsEl = $("petals");
+const PETALS = ["🌸", "🌷", "🌺", "🌻", "🌼"];
 function spawnPetal(x) {
   const p = document.createElement("span");
   p.className = "petal";
   p.textContent = PETALS[(Math.random() * PETALS.length) | 0];
   p.style.left = (x != null ? x : Math.random() * 100) + "%";
-  p.style.fontSize = 14 + Math.random() * 18 + "px";
-  p.style.animationDuration = 5 + Math.random() * 5 + "s";
-  petals.appendChild(p);
+  p.style.fontSize = 18 + Math.random() * 22 + "px";
+  p.style.animationDuration = 6 + Math.random() * 6 + "s";
+  petalsEl.appendChild(p);
   setTimeout(() => p.remove(), 11000);
 }
-function burstPetals(count, fromEl) {
-  let x = null;
-  if (fromEl) {
-    const r = fromEl.getBoundingClientRect();
-    x = ((r.left + r.width / 2) / window.innerWidth) * 100;
-  }
-  for (let i = 0; i < count; i++) setTimeout(() => spawnPetal(x), i * 40);
+function burstPetals(count) {
+  for (let i = 0; i < count; i++) setTimeout(() => spawnPetal(), i * 40);
 }
-/* ambient */
-setInterval(() => spawnPetal(), 1400);
+setInterval(() => spawnPetal(), 900);
 spawnPetal();
 
-/* modal flower burst */
-function modalFlowerBurst() {
+// CELEBRATE MODAL
+$("celebrateBtn").addEventListener("click", () => {
+  $("fireworks-overlay").classList.remove("hidden");
+  burstPetals(60);
+  
   const wrap = $("modalFlowers");
   wrap.innerHTML = "";
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < 30; i++) {
     const f = document.createElement("span");
+    f.className = "confetti-piece";
     f.textContent = PETALS[(Math.random() * PETALS.length) | 0];
-    f.style.position = "absolute";
     f.style.left = Math.random() * 100 + "%";
-    f.style.top = "-30px";
-    f.style.fontSize = 16 + Math.random() * 16 + "px";
-    f.style.animation = `fall ${4 + Math.random() * 4}s linear forwards`;
+    f.style.fontSize = 18 + Math.random() * 14 + "px";
+    f.style.animationDuration = 3 + Math.random() * 3 + "s";
     f.style.animationDelay = Math.random() * 1.5 + "s";
     wrap.appendChild(f);
   }
-}
+});
 
-/* music toggle via floating not needed; play starts on gift open */
+$("closeModal").addEventListener("click", () => {
+  $("fireworks-overlay").classList.add("hidden");
+});
