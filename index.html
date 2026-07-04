@@ -4,186 +4,328 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Happy Birthday ♡</title>
-  <meta name="description" content="A little website made with love for your birthday." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- floating flower petals -->
-  <div class="petals" id="petals" aria-hidden="true"></div>
-
   <!-- background music -->
   <audio id="bgm" loop preload="auto"><source src="song1.mp3" type="audio/mpeg" /></audio>
 
-  <!-- ============ LOADING ============ -->
-  <div class="loader" id="loader">
-    <div class="loader-flower">💐</div>
-    <p>Preparing something special for you...</p>
+  <!-- LOADING -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-flower">
+        <svg class="petal-svg" viewBox="0 0 100 100">
+           <text y="50" font-size="50">💐</text>
+        </svg>
+      </div>
+      <div class="loading-text">Preparing something special...</div>
+    </div>
   </div>
 
-  <!-- ============ LOCK / PASSWORD ============ -->
-  <section class="lock hidden" id="lock">
-    <div class="lock-card">
-      <div class="lock-flower">🌸</div>
-      <h1 class="lock-title">For You, My Love</h1>
-      <p class="lock-sub">Enter our secret code</p>
-      <div class="pin-dots" id="pinDots">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  <!-- PIN SCREEN -->
+  <section id="pin-screen" class="screen hidden">
+    <canvas id="pin-canvas"></canvas>
+    <div class="pin-card">
+      <div class="pin-flower-top">🌸</div>
+      <h1 class="pin-title">For You</h1>
+      <p class="pin-subtitle">Enter our secret code</p>
+      <div class="pin-display" id="pinDots">
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
       </div>
-      <div class="keypad" id="keypad">
-        <button data-key="1">1</button>
-        <button data-key="2">2</button>
-        <button data-key="3">3</button>
-        <button data-key="4">4</button>
-        <button data-key="5">5</button>
-        <button data-key="6">6</button>
-        <button data-key="7">7</button>
-        <button data-key="8">8</button>
-        <button data-key="9">9</button>
-        <button data-key="del" class="sub">✕</button>
-        <button data-key="0">0</button>
-        <button data-key="del" class="sub">↩</button>
+      <div class="pin-pad" id="keypad">
+        <button class="pin-btn" data-key="1">1</button>
+        <button class="pin-btn" data-key="2">2</button>
+        <button class="pin-btn" data-key="3">3</button>
+        <button class="pin-btn" data-key="4">4</button>
+        <button class="pin-btn" data-key="5">5</button>
+        <button class="pin-btn" data-key="6">6</button>
+        <button class="pin-btn" data-key="7">7</button>
+        <button class="pin-btn" data-key="8">8</button>
+        <button class="pin-btn" data-key="9">9</button>
+        <button class="pin-btn pin-clear" data-key="del">✕</button>
+        <button class="pin-btn" data-key="0">0</button>
+        <button class="pin-btn pin-submit" data-key="del">↩</button>
       </div>
-      <p class="lock-hint">Hint : 21-10-2006 💕</p>
+      <div class="pin-hint">Hint : 21-10-2006 💕</div>
+    </div>
+    <div class="pin-success-overlay hidden" id="pinSuccessOverlay"></div>
+  </section>
+
+  <!-- GIFT BOX -->
+  <section id="giftbox-screen" class="screen hidden">
+    <div class="gift-bg-glow"></div>
+    <div class="gift-instruction"><p>✨ Tap to open ✨</p></div>
+    <div class="giftbox-wrapper" id="giftbox">
+      <div class="giftbox">
+        <div class="gift-rays" id="giftRays"></div>
+        <div class="gift-inner-glow" id="giftGlow"></div>
+        <div class="giftbox-lid" id="giftLid">
+          <div class="lid-face lid-top"></div>
+          <div class="ribbon-h"></div>
+          <div class="ribbon-v"></div>
+          <div class="bow">
+            <div class="bow-left"></div>
+            <div class="bow-right"></div>
+            <div class="bow-center"></div>
+          </div>
+        </div>
+        <div class="giftbox-body">
+          <div class="body-face body-front"></div>
+          <div class="body-ribbon-h"></div>
+          <div class="body-ribbon-v"></div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ============ GIFT OPENING ============ -->
-  <section class="gift hidden" id="gift">
-    <p class="gift-label">✨ Opening your gift... ✨</p>
-    <div class="giftbox" id="giftbox">
-      <div class="rays"></div>
-      <div class="gift-lid"><span class="bow">🎀</span></div>
-      <div class="gift-body"></div>
-    </div>
-    <p class="gift-tap">tap the gift ♡</p>
-  </section>
-
-  <!-- ============ MAIN CONTENT ============ -->
+  <!-- MAIN CONTENT -->
   <main id="main" class="hidden">
+    <div id="scroll-progress-bar"></div>
+    <div class="ambient-petals-layer" id="petals"></div>
 
     <!-- HERO -->
-    <section class="section hero reveal">
-      <p class="eyebrow">🌸 Your Special Day 🌸</p>
-      <h1 class="hero-title">Happy<br/><em>Birthday</em><br/><span class="hero-name" id="heroName">Ciwa</span></h1>
-      <span class="rule"></span>
-      <p class="hero-date" id="heroDate">JUNE 10 &nbsp;·&nbsp; THE MOST SPECIAL DAY</p>
-      <p class="scroll-cue">⌄<br/><span>scroll</span></p>
+    <section class="section-hero reveal-fade">
+      <div class="hero-flowers">
+        <div class="h-flower hf1">🌸</div>
+        <div class="h-flower hf2">🌷</div>
+        <div class="h-flower hf3">🌸</div>
+        <div class="h-flower hf4">🌻</div>
+        <div class="h-flower hf5">🌼</div>
+      </div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">🌸 YOUR SPECIAL DAY 🌸</p>
+        <h1 class="hero-title">
+          <span class="hero-title-line">Happy</span>
+          <span class="hero-title-line accent-script">Birthday</span>
+          <span class="hero-name" id="heroName">Ciwa</span>
+        </h1>
+        <div class="hero-divider"></div>
+        <div class="hero-typewriter" id="heroTypewriter">The most special day</div>
+        <p class="hero-date" id="heroDate">JUNE 10 · THE MOST SPECIAL DAY</p>
+      </div>
+      <div class="scroll-indicator">
+        <div class="scroll-arrow"></div>
+        <span>SCROLL</span>
+      </div>
     </section>
 
-    <!-- DIGITAL BOUQUET -->
-    <section class="section bouquet reveal">
-      <p class="section-eyebrow">— MY FIRST GIFT —</p>
+    <!-- BOUQUET -->
+    <section class="section-bouquet reveal-up">
+      <p class="section-label">— MY FIRST GIFT —</p>
       <h2 class="section-title">A Digital Bouquet</h2>
-      <p class="section-sub">Each flower holds a little message just for you</p>
+      <p class="section-subtitle">Each flower holds a little message just for you</p>
 
-      <div class="vase-stage" id="vaseStage">
-        <button class="flower" data-msg="You are as beautiful as cherry blossoms — lovely and bringing joy wherever you go.">🌸</button>
-        <button class="flower" data-msg="Your cheerfulness is like a hibiscus — bright and vibrant.">🌺</button>
-        <button class="flower" data-msg="Like a rose, you are elegant, strong, and absolutely unforgettable.">🌹</button>
-        <button class="flower" data-msg="Like a tulip, your love is gentle and always quietly blooming.">🌷</button>
-        <button class="flower" data-msg="Your warmth is like a lotus — pure and beautiful.">🪷</button>
-        <div class="vase"><span>🎀</span></div>
+      <div class="bouquet-container" id="vaseStage">
+        <div class="bouquet-glow-bg"></div>
+        <div class="bouquet-flowers">
+          <div class="b-flower" style="top: 20%; left: 20%" data-msg="You are as beautiful as cherry blossoms — lovely and bringing joy wherever you go.">
+            <span class="b-flower-emoji">🌸</span>
+          </div>
+          <div class="b-flower" style="top: 10%; left: 40%" data-msg="Your cheerfulness is like a hibiscus — bright and vibrant.">
+            <span class="b-flower-emoji">🌺</span>
+          </div>
+          <div class="b-flower" style="top: 25%; left: 60%" data-msg="Like a rose, you are elegant, strong, and absolutely unforgettable.">
+            <span class="b-flower-emoji">🌹</span>
+          </div>
+          <div class="b-flower" style="top: 45%; left: 30%" data-msg="Like a tulip, your love is gentle and always quietly blooming.">
+            <span class="b-flower-emoji">🌷</span>
+          </div>
+          <div class="b-flower" style="top: 40%; left: 50%" data-msg="Your warmth is like a lotus — pure and beautiful.">
+            <span class="b-flower-emoji">🪷</span>
+          </div>
+        </div>
+        <div class="bouquet-stem-wrap">
+          <div class="bouquet-stems" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1;">
+            <svg viewBox="0 0 340 420" style="width: 100%; height: 100%;">
+              <g stroke="#5c8a5a" stroke-width="4" fill="none" stroke-linecap="round">
+                <!-- Stems -->
+                <path d="M 93,109 Q 150,250 170,356" />
+                <path d="M 161,67 Q 165,200 170,356" />
+                <path d="M 229,130 Q 185,250 170,356" />
+                <path d="M 127,214 Q 155,290 170,356" />
+                <path d="M 195,193 Q 175,280 170,356" />
+              </g>
+              <!-- Leaves -->
+              <g fill="#5c8a5a">
+                <path d="M 125,230 Q 100,210 115,195 Q 135,210 125,230" />
+                <path d="M 168,160 Q 185,140 195,155 Q 180,175 168,160" />
+                <path d="M 200,220 Q 225,210 215,190 Q 195,200 200,220" />
+                <path d="M 155,280 Q 135,270 145,255 Q 165,270 155,280" />
+                <path d="M 170,300 Q 190,290 185,275 Q 165,285 170,300" />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="bouquet-ribbon">
+          <div class="ribbon-knot"></div>
+        </div>
       </div>
-
-      <p class="hint-small">Touch each flower to reveal its message 💕</p>
-      <div class="flower-msg" id="flowerMsg">Tap a flower above ✿</div>
+      <div class="bouquet-message">
+        <p id="flowerMsg">Tap a flower above ✿</p>
+      </div>
     </section>
 
     <!-- LETTER -->
-    <section class="section letter reveal">
-      <p class="section-eyebrow">— FROM MY HEART —</p>
+    <section class="section-letter reveal-up">
+      <p class="section-label">— FROM MY HEART —</p>
       <h2 class="section-title">A Letter For You</h2>
-      <article class="letter-card">
-        <span class="letter-stamp" id="letterStamp">June 10</span>
-        <h3 class="letter-greet">for my dearest love!</h3>
-        <div id="letterBody"></div>
-      </article>
+      
+      <div class="letter-wrapper">
+        <div class="letter-card">
+          <div class="letter-corner tl"></div>
+          <div class="letter-corner tr"></div>
+          <div class="letter-corner bl"></div>
+          <div class="letter-corner br"></div>
+          
+          <div class="letter-header">
+            <div class="letter-floral-deco">❈ ❈ ❈</div>
+            <div class="letter-date" id="letterStamp">June 10</div>
+          </div>
+          <div class="letter-body">
+            <h3 class="letter-salutation">For my dearest love,</h3>
+            <div id="letterBody"></div>
+          </div>
+
+          <div class="letter-floral-bottom">❈ ❈ ❈</div>
+        </div>
+      </div>
     </section>
 
-    <!-- PHOTO MEMORIES -->
-    <section class="section memories reveal">
-      <p class="section-eyebrow">— A COLLECTION OF MEMORIES —</p>
+    <!-- MEMORIES -->
+    <section class="section-memories reveal-up">
+      <p class="section-label">— A COLLECTION OF MEMORIES —</p>
       <h2 class="section-title">BIRTHDAY GIRL!</h2>
-      <p class="section-sub">the sweetest person i know</p>
-      <div class="polaroids" id="polaroids"></div>
+      <p class="section-subtitle">the sweetest person i know</p>
+      
+      <div class="polaroid-grid" id="polaroids"></div>
     </section>
+
+
 
     <!-- PLAYLIST -->
-    <section class="section playlist reveal">
-      <h2 class="section-title">Special Playlist</h2>
-      <p class="section-sub">Songs that always remind me of you 🌼</p>
-      <div class="player">
-        <div class="disc" id="disc"><span class="disc-center"></span></div>
-        <p class="np-title" id="npTitle">—</p>
-        <p class="np-artist" id="npArtist">—</p>
-        <div class="progress" id="progress"><span id="progressFill"></span></div>
-        <div class="player-btns">
-          <button id="prevBtn" aria-label="prev">⏮</button>
-          <button id="playBtn" class="play" aria-label="play">▶</button>
-          <button id="nextBtn" aria-label="next">⏭</button>
+    <section class="section-music reveal-up">
+      <p class="section-label">— SPECIAL PLAYLIST —</p>
+      <h2 class="section-title">Songs For You</h2>
+      
+      <div class="player-container">
+        <div class="glass-card player-card">
+          <div class="player-artwork">
+            <div class="artwork-glow"></div>
+            <div class="artwork-inner">
+              <div class="vinyl-record" id="disc">
+                <div class="vinyl-center"></div>
+              </div>
+            </div>
+          </div>
+          <div class="player-track-name" id="npTitle">—</div>
+          <div class="player-artist" id="npArtist">—</div>
+          
+          <div class="visualizer-container">
+            <div class="viz-bars" id="vizBars">
+              <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
+              <div class="viz-bar"></div><div class="viz-bar"></div>
+            </div>
+          </div>
+          
+          <div class="player-progress-wrap">
+            <div class="player-progress-bg" id="progress">
+              <div class="player-progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+          
+          <div class="player-controls">
+            <button class="ctrl-btn" id="prevBtn">⏮</button>
+            <button class="ctrl-btn ctrl-play" id="playBtn">▶</button>
+            <button class="ctrl-btn" id="nextBtn">⏭</button>
+          </div>
         </div>
+        
+        <div class="playlist-list" id="songList"></div>
       </div>
-      <ul class="song-list" id="songList"></ul>
     </section>
 
-    <!-- JAR -->
-    <section class="section jar-sec reveal">
-      <p class="section-eyebrow">— FROM MY HEART TO YOURS —</p>
-      <h2 class="section-title">Reasons I'm Grateful to Know You</h2>
-      <p class="section-sub">Shake the jar and pick a note 🫙</p>
-      <div class="jar" id="jar">
-        <div class="jar-lid"></div>
-        <div class="jar-body">
-          <span class="luv l1">💙</span>
-          <span class="luv l2">🩵</span>
-          <span class="luv l3">🤍</span>
-          <span class="luv l4">💙</span>
-          <span class="luv l5">🩵</span>
-          <span class="luv l6">💙</span>
-          <span class="luv l7">🤍</span>
-          <span class="luv l8">🩵</span>
-          <span class="luv l9">💙</span>
-          <span class="luv l10">🤍</span>
+    <!-- REASONS JAR -->
+    <section class="section-reasons reveal-up">
+      <p class="section-label">— FROM MY HEART TO YOURS —</p>
+      <h2 class="section-title">Reasons I'm Grateful</h2>
+      
+      <div class="jar-wrapper">
+        <div class="reasons-jar" id="jar">
+          <div class="jar-svg-wrap" style="position: relative;">
+            <span style="font-size:120px; filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.4)); position: relative; z-index: 1;">🫙</span>
+            <!-- Bintang dan Love di dalam toples -->
+            <div class="jar-content-item" style="top: 50%; left: 30%; font-size: 20px;">⭐</div>
+            <div class="jar-content-item" style="top: 40%; left: 60%; font-size: 24px;">💗</div>
+            <div class="jar-content-item" style="top: 70%; left: 45%; font-size: 22px;">⭐</div>
+            <div class="jar-content-item" style="top: 60%; left: 70%; font-size: 18px;">💗</div>
+            <div class="jar-content-item" style="top: 80%; left: 35%; font-size: 25px;">💗</div>
+          </div>
+        </div>
+        <button class="jar-shake-btn" id="shakeBtn"><span>Shake the Jar ✨</span></button>
+        
+        <div class="reason-card-display">
+          <div class="reason-note hidden" id="jarNoteCard">
+            <div class="note-number">#1</div>
+            <div class="note-text" id="jarNote"></div>
+            <div class="note-heart">💗</div>
+          </div>
         </div>
       </div>
-      <button class="pill-btn" id="shakeBtn">🫙 Shake the Jar</button>
-      <div class="jar-note" id="jarNote"></div>
     </section>
 
     <!-- FINAL WISH -->
-    <section class="section wish reveal">
-      <p class="eyebrow">🌸 With all my heart 🌸</p>
-      <h2 class="wish-title">May your life always be <em>filled</em> with flowers</h2>
-      <p class="wish-text" id="wishText"></p>
-      <button class="pill-btn glow" id="celebrateBtn">🎂 Celebrate</button>
-      <p class="signoff">-with love ziyah maybe your last princess💗</p>
+    <section class="section-final reveal-fade">
+      <div class="final-flowers-bg"></div>
+      <div class="final-lights">
+        <div class="glowing-orb" style="width:100px;height:100px;top:20%;left:20%"></div>
+        <div class="glowing-orb" style="width:150px;height:150px;bottom:20%;right:20%"></div>
+      </div>
+      
+      <div class="final-content">
+        <p class="final-eyebrow">🌸 WITH ALL MY HEART 🌸</p>
+        <h2 class="final-title">
+          May your life <span class="final-accent">always be filled</span> with flowers
+        </h2>
+        <p class="final-message" id="wishText"></p>
+        <div class="final-signature" id="finalSign">-with love ziyah maybe your last princess💗</div>
+        
+        <button class="final-celebrate-btn" id="celebrateBtn">🎂 CELEBRATE</button>
+      </div>
     </section>
 
   </main>
 
-  <!-- ============ HAPPY BIRTHDAY MODAL ============ -->
-  <div class="modal hidden" id="hbdModal">
-    <div class="modal-flowers" id="modalFlowers" aria-hidden="true"></div>
-    <div class="modal-card">
-      <div class="cake">🎂</div>
-      <h2 class="modal-title">Happy birthday!</h2>
-      <p class="modal-sub">who is already 20 years old rn😼</p>
-      <button class="pill-btn" id="closeModal">Close ✕</button>
+  <!-- Photo Modal -->
+  <div class="photo-modal hidden" id="lightbox">
+    <div class="modal-backdrop" id="lbClose"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="lbCloseBtn">✕</button>
+      <div class="modal-polaroid">
+        <div class="modal-photo">
+          <img class="modal-photo-img" id="lbImg" src="" alt="Photo" />
+        </div>
+        <div class="modal-caption" id="lbCap"></div>
+      </div>
     </div>
   </div>
 
-  <!-- ============ PHOTO LIGHTBOX ============ -->
-  <div class="lightbox hidden" id="lightbox">
-    <button class="lb-close" id="lbClose" aria-label="tutup">✕</button>
-    <figure class="lb-figure">
-      <img id="lbImg" alt="memory" />
-      <figcaption id="lbCap"></figcaption>
-    </figure>
+  <!-- Fireworks / Celebration Overlay -->
+  <div id="fireworks-overlay" class="hidden">
+    <div class="celebration-rain" id="modalFlowers"></div>
+    <div class="celebration-message">
+      <div class="celeb-emoji">🎂</div>
+      <h2>Happy birthday!</h2>
+      <p>who is already 20 years old rn😼</p>
+      <button class="celeb-close-btn" id="closeModal">Close ✕</button>
+    </div>
   </div>
+
+  <button class="music-float-btn hidden" id="musicFloatBtn">🎵</button>
 
   <script src="script.js"></script>
 </body>
